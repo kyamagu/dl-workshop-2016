@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "1. Pythonと数値計算"
-date:   2016-06-25 13:59:06 +0900
+date:   2016-07-16 12:00:00 +0900
 category: python
 ---
 
