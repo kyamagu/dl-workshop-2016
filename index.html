@@ -9,7 +9,7 @@ layout: default
 
   <h1 class="page-heading">準備</h1>
   <ul class="post-list">
-    {% assign posts = site.categories.python | sort:'title' %}
+    {% assign posts = site.categories.python | sort: "title" %}
     {% for post in posts %}
       <li>
         <a class="post-link" href="{{ post.url | prepend: site.github.url }}">{{ post.title }}</a>
@@ -19,7 +19,7 @@ layout: default
 
   <h1 class="page-heading">画像認識</h1>
   <ul class="post-list">
-    {% assign posts = site.categories.caffe | sort:'title' %}
+    {% assign posts = site.categories.caffe | sort: "title" %}
     {% for post in posts %}
       <li>
         <a class="post-link" href="{{ post.url | prepend: site.github.url }}">{{ post.title }}</a>

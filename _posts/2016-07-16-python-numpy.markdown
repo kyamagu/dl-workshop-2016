@@ -1,8 +1,9 @@
 ---
 layout: post
 title:  "1. Pythonと数値計算"
-date:   2016-07-16 12:00:00 +0900
+date:   2016-07-16 02:00:00 +09:00
 category: python
+permalink: 1-python-numpy
 ---
 
 * TOC

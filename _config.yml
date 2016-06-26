@@ -17,3 +17,4 @@ github_username:  kyamagu
 
 # Build settings
 markdown: kramdown
+future: true

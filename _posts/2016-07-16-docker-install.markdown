@@ -1,8 +1,9 @@
 ---
 layout: post
 title:  "0. Docker+Jupyter環境の構築"
-date:   2016-07-16 12:00:00 +0900
+date:   2016-07-16 00:00:00 +09:00
 category: python
+permalink: 0-docker-jupyter
 ---
 
  * TOC
