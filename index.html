@@ -1,0 +1,37 @@
+---
+layout: default
+---
+
+<div class="home">
+
+  <p>このページはDeep Learningモデルを使って画像認識をする方法を一通り学ぶ実習教材として作られました。
+    ここではPython環境で<a href="https://github.com/BVLC/caffe" target="_blank">Caffeフレームワーク</a>を利用して画像認識モデルを学習、評価する方法を学ぶことができます。</p>
+
+  <h1 class="page-heading">準備</h1>
+  <ul class="post-list">
+    {% assign posts = site.categories.python | sort:'title' %}
+    {% for post in posts %}
+      <li>
+        <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <h1 class="page-heading">画像認識</h1>
+  <ul class="post-list">
+    {% assign posts = site.categories.caffe | sort:'title' %}
+    {% for post in posts %}
+      <li>
+        <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <h2>参考</h2>
+  <ul>
+    <li><a href="http://cs231n.github.io/" target="_blank">Stanford CS231n: Convolutional Neural Networks for Visual Recognition</a></li>
+  </ul>
+
+  <!--<p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>-->
+
+</div>
