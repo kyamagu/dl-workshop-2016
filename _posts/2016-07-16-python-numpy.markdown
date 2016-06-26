@@ -814,8 +814,8 @@ img_tinted = imresize(img_tinted, (300, 300))
 imsave('assets/cat_tinted.jpg', img_tinted)
 {% endhighlight %}
 
-![cat]({{ site.github.url }}/assets/cat.jpg)
-![cat_tinted]({{ site.github.url }}/assets/cat_tinted.jpg)
+![cat]({{ site.baseurl }}/assets/cat.jpg)
+![cat_tinted]({{ site.baseurl }}/assets/cat_tinted.jpg)
 {: style="text-align: center;"}
 
 Left: The original image. Right: The tinted and resized image.
@@ -878,7 +878,7 @@ plt.show()  # 最後に plt.show() を呼ばないと表示されないので注
 
 実際に動かすと以下のようなプロットが表示されます。
 
-![sine]({{ site.github.url }}/assets/sine.png)
+![sine]({{ site.baseurl }}/assets/sine.png)
 {: style="text-align: center;"}
 
 もう少し付け足すと複数のプロットを一度に行ったりタイトル、凡例、軸のラベルなどをつけることができます。
@@ -902,7 +902,7 @@ plt.legend(['Sine', 'Cosine'])
 plt.show()
 {% endhighlight %}
 
-![sine_cosine]({{ site.github.url }}/assets/sine_cosine.png)
+![sine_cosine]({{ site.baseurl }}/assets/sine_cosine.png)
 {: style="text-align: center;"}
 
 `plot`の細かい使い方は[ドキュメント](http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.plot)を参照。
@@ -936,7 +936,7 @@ plt.title('Cosine')
 plt.show()
 {% endhighlight %}
 
-![sine_cosine_subplot]({{ site.github.url }}/assets/sine_cosine_subplot.png)
+![sine_cosine_subplot]({{ site.baseurl }}/assets/sine_cosine_subplot.png)
 {: style="text-align: center;"}
 
 詳しくは`subplot`の[ドキュメント](http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.subplot)を参照。
@@ -966,6 +966,6 @@ plt.imshow(np.uint8(img_tinted))
 plt.show()
 {% endhighlight %}
 
-![cat_tinted_imshow]({{ site.github.url }}/assets/cat_tinted_imshow.png)
+![cat_tinted_imshow]({{ site.baseurl }}/assets/cat_tinted_imshow.png)
 {: style="text-align: center;"}
 
