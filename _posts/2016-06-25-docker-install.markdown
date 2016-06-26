@@ -70,7 +70,7 @@ docker run -it -p 8888:8888 kyamagu/caffe
 
 これでDockerコンテナが起動した状態になります。Webブラウザを開き、[http://localhost:8888/](http://localhost:8888/)にアクセスしてみてください。Jupyter notebookの画面が表示されると思います。
 
-![Jupyter notebook](/assets/jupyter-screen1.png)
+![Jupyter notebook]({{ site.github.url }}/assets/jupyter-screen1.png)
 {: style="text-align:center;"}
 
 起動しているDockerコンテナを止めるにはコンソールで`Ctrl+C`を2回押すか、`Ctrl+C`の後に`y`を押してエンターキーで終了してください。
@@ -125,14 +125,14 @@ docker rm `docker ps --no-trunc -aq`
 
 起動時に以下のような画面が表示されると思います。これは現在のディレクトリの一覧を表示しています。実習では`caffe`のコードが入っているディレクトリが置かれた状態になっていると思います。
 
-![Jupyter notebook](/assets/jupyter-screen1.png)
+![Jupyter notebook]({{ site.github.url }}/assets/jupyter-screen1.png)
 {: style="text-align:center;"}
 
 ### Notebookの作成
 
 まずはNotebook形式でPythonプログラムを実行してみましょう。右上の`New`からNotebooks Python 2を選んで新しいノートを作成します。ノートは高機能なPythonコンソールのようなもので、Pythonコードを記入して実行したり、ドキュメントを記述することができます。以下に一例を示します。
 
-![Jupyter notebook](/assets/jupyter-screen2.png)
+![Jupyter notebook]({{ site.github.url }}/assets/jupyter-screen2.png)
 {: style="text-align:center;"}
 
 ノートブックを使うと様々な操作ができます。また、[ショートカットキーも充実している](http://qiita.com/angelapy/items/998e99b2d0dc991c99f7)ので慣れるとほぼマウスを使わずに全ての操作ができるようになります。このノートでの作業を終了するときはFileからClose and Haltを選びます。
@@ -141,7 +141,7 @@ docker rm `docker ps --no-trunc -aq`
 
 最初の画面で右上の`New`からTermninalを選ぶとこのコンテナのUNIXコンソールを開くことができます。以下に例を示します。デフォルトでは`sh`を起動するので`bash`を使うときは後から`bash`を起動します。
 
-![Jupyter notebook](/assets/jupyter-screen3.png)
+![Jupyter notebook]({{ site.github.url }}/assets/jupyter-screen3.png)
 {: style="text-align:center;"}
 
 また、Python notebookは[IPython環境](https://ipython.org/)なので、`!`をつけてノートブック上から直接UNIXコマンドを呼び出すこともできます。
@@ -150,5 +150,5 @@ docker rm `docker ps --no-trunc -aq`
 
 この他にも`New`からディレクトリを作ったりテキストファイルを作成することができます。例えばテキストファイルを作ると以下のようにエディタが使えます。これでPythonプログラムを作成することもできます。
 
-![Jupyter notebook](/assets/jupyter-screen4.png)
+![Jupyter notebook]({{ site.github.url }}/assets/jupyter-screen4.png)
 {: style="text-align:center;"}

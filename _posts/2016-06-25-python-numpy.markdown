@@ -10,7 +10,7 @@ category: python
 
 ## はじめに
 
-このページは<a href="http://cs231n.github.io/" target="_blank">Stanford CS231n: Convolutional Neural Networks for Visual Recognition</a>を参考に作られています。
+このページは[Stanford CS231n: Convolutional Neural Networks for Visual Recognition](http://cs231n.github.io/)を参考に作られています。
 
 この実習ではPythonプログラミング言語を使用します。Pythonは汎用的なインタプリタ型言語で、数値計算(numpy, scipy)やプロット表示(matplotlib)など科学技術計算向けのライブラリが充実しているため、近年画像処理用途にも人気が高まっています。
 
@@ -813,8 +813,8 @@ img_tinted = imresize(img_tinted, (300, 300))
 imsave('assets/cat_tinted.jpg', img_tinted)
 {% endhighlight %}
 
-![cat](/assets/cat.jpg)
-![cat_tinted](/assets/cat_tinted.jpg)
+![cat]({{ site.github.url }}/assets/cat.jpg)
+![cat_tinted]({{ site.github.url }}/assets/cat_tinted.jpg)
 {: style="text-align: center;"}
 
 Left: The original image. Right: The tinted and resized image.
@@ -877,7 +877,7 @@ plt.show()  # 最後に plt.show() を呼ばないと表示されないので注
 
 実際に動かすと以下のようなプロットが表示されます。
 
-![sine](/assets/sine.png)
+![sine]({{ site.github.url }}/assets/sine.png)
 {: style="text-align: center;"}
 
 もう少し付け足すと複数のプロットを一度に行ったりタイトル、凡例、軸のラベルなどをつけることができます。
@@ -901,7 +901,7 @@ plt.legend(['Sine', 'Cosine'])
 plt.show()
 {% endhighlight %}
 
-![sine_cosine](/assets/sine_cosine.png)
+![sine_cosine]({{ site.github.url }}/assets/sine_cosine.png)
 {: style="text-align: center;"}
 
 `plot`の細かい使い方は[ドキュメント](http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.plot)を参照。
@@ -935,7 +935,7 @@ plt.title('Cosine')
 plt.show()
 {% endhighlight %}
 
-![sine_cosine_subplot](/assets/sine_cosine_subplot.png)
+![sine_cosine_subplot]({{ site.github.url }}/assets/sine_cosine_subplot.png)
 {: style="text-align: center;"}
 
 詳しくは`subplot`の[ドキュメント](http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.subplot)を参照。
@@ -965,6 +965,6 @@ plt.imshow(np.uint8(img_tinted))
 plt.show()
 {% endhighlight %}
 
-![cat_tinted_imshow](/assets/cat_tinted_imshow.png)
+![cat_tinted_imshow]({{ site.github.url }}/assets/cat_tinted_imshow.png)
 {: style="text-align: center;"}
 

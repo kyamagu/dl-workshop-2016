@@ -11,7 +11,7 @@ title: Deep Learning実習
 description: > # this means to ignore newlines until "baseurl:"
   Caffeフレームワークを利用した画像認識実習
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://kyamagu.github.io/dl-workshop-2016/" # the base hostname & protocol for your site
+url: "https://kyamagu.github.io/dl-workshop-2016/" # the base hostname & protocol for your site
 #twitter_username: kotymg
 github_username:  kyamagu
 
