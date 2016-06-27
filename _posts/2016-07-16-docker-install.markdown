@@ -150,7 +150,9 @@ docker rm <Container-ID>
 docker rm `docker ps --no-trunc -aq`
 {% endhighlight %}
 
-[Dockerドキュメント](https://docs.docker.com/)に詳細な使い方が書かれています。また、WindowsとMacユーザーは[Kitematic](https://kitematic.com)というGUIアプリケーションを使ってDockerを操作することもできます。
+[Dockerドキュメント](https://docs.docker.com/)に詳細な使い方が書かれています。また、WindowsとMacユーザーは[Kitematic](https://kitematic.com)というGUIアプリケーションを使ってDockerコンテナを操作することもできます。Kitematicを使う場合は`kyamagu`で実習用のイメージ`kyamagu/caffe`を検索してください。
+
+![kitematic-screen]({{ site.baseurl }}/assets/kitematic-screen.png)
 
 ## Jupyter notebookについて
 

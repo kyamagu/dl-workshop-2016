@@ -794,10 +794,14 @@ SciPyを知るための一番の方法は[ドキュメント](http://docs.scipy.
 
 ### 画像の操作
 
+`scipy.misc`モジュールに簡単な画像読み書き用の関数が用意されています。
+
 {% highlight python %}
 from scipy.misc import imread, imsave, imresize
 
 # JPEGファイルをNumpy配列に読み込み
+# 今回の実習ではこのパスに画像ファイルは置いていないので代わりに
+# 'caffe/examples/images/cat.jpg' を使ってください
 img = imread('assets/cat.jpg')
 print img.dtype, img.shape  #=> "uint8 (400, 248, 3)"
 
@@ -818,7 +822,20 @@ imsave('assets/cat_tinted.jpg', img_tinted)
 ![cat_tinted]({{ site.baseurl }}/assets/cat_tinted.jpg)
 {: style="text-align: center;"}
 
-Left: The original image. Right: The tinted and resized image.
+左：元の画像、 右：色落ちとリサイズされた画像
+{: style="text-align: center;"}
+
+また、もう少し高機能な画像の扱いをするライブラリに[`PIL`モジュール](https://pillow.readthedocs.io/en/3.2.x/)があります。これは`SciPy`とは関係なく使えます。
+
+{% highlight python %}
+import numpy as np
+from PIL import Image
+
+img = Image.new('assets/cat.jpg')        # imgはImageオブジェクト、配列ではないので注意
+img.resize((300, 300), Image.ANTIALIAS)  # 画像をリサイズ
+arr = np.array(img)                      # Numpy配列に変換します
+{% endhighlight %}
+
 
 ### MATLABファイル
 

@@ -97,6 +97,9 @@ transformed_image = transformer.preprocess('data', image)
 plt.imshow(image)
 {% endhighlight %}
 
+![cat]({{ site.baseurl }}/assets/2-cat.png)
+{: style="text-align:center"}
+
 可愛らしいネコの画像は表示されたでしょうか。早速分類してみましょう。
 
 {% highlight python %}
@@ -123,7 +126,7 @@ print 'output label:', labels[output_prob.argmax()]
 {% endhighlight %}
 `output label: n02123045 tabby, tabby cat`
 
-この画像は`Tabby cat`で合ってますね。ついでに他の確率の高そうなカテゴリも見てみましょう。
+この画像は`Tabby cat`（ブチ猫）で合ってますね。ついでに他の確率の高そうなカテゴリも見てみましょう。
 
 {% highlight python %}
 # Softmax出力をソートしてトップ5の予測を取得
@@ -145,3 +148,162 @@ zip(output_prob[top_inds], labels[top_inds])
 出てきたカテゴリは`tabby, tabby cat`、`tiger cat`、`Egyptian cat`、`red fox, Vulpes vulpes`、`lynx, catamount`の順です。確率の低いカテゴリの方は惜しい感じのものが出てきていますね。
 
 
+## ニューラルネットの中間出力
+
+ニューラルネットワークはブラックボックスではありません。少し内部でどのようなことが起きているのか覗いてみましょう。
+
+まず、最初にネットワークがどのような構造になっているのか見てみましょう。畳み込みニューラルネットワークは層構造になっていて、内部のレイヤーにはおおよそ`(batch_size, channel_dim, height, width)`のような4次元状のアクティベーション配列を持っています。このアクティベーションは`OrderedDict`データ型を持っていて`net.blobs`でアクセスできます。入力された画像などのデータを`forward`した時にこの配列の中身にアクティベーションの計算結果が格納されます。次のコードで内部のレイヤーごとのブロブ配列の形を出力してみましょう。
+
+{% highlight python %}
+for layer_name, blob in net.blobs.iteritems():
+    print layer_name + '\t' + str(blob.data.shape)
+{% endhighlight %}
+
+以下のような出力が出てくると思います。
+
+```
+data  (50, 3, 227, 227)
+conv1 (50, 96, 55, 55)
+pool1 (50, 96, 27, 27)
+norm1 (50, 96, 27, 27)
+conv2 (50, 256, 27, 27)
+pool2 (50, 256, 13, 13)
+norm2 (50, 256, 13, 13)
+conv3 (50, 384, 13, 13)
+conv4 (50, 384, 13, 13)
+conv5 (50, 256, 13, 13)
+pool5 (50, 256, 6, 6)
+fc6 (50, 4096)
+fc7 (50, 4096)
+fc8 (50, 1000)
+prob  (50, 1000)
+```
+
+続いて、ネットワークのパラメータの形を見てみましょう。パラメータはに`OrderedDict`データ型として`net.params`からアクセスできます。パラメータにはCNNの重み行列などが格納されています。`net.params`の各レイヤーの要素は`[0]`で重み、`[1]`でバイアスにアクセスできるようになっています。パラメータの形は重みは`(output_channels, input_channels, filter_height, filter_width)`といった4次元状の配列でバイアスは`(output_channels,)`といった1次元の配列として格納されていることがほとんどです。次のコードで形を出力してみましょう。
+
+{% highlight python %}
+for layer_name, param in net.params.iteritems():
+    print layer_name + '\t' + str(param[0].data.shape), str(param[1].data.shape)
+{% endhighlight %}
+
+```
+conv1 (96, 3, 11, 11) (96,)
+conv2 (256, 48, 5, 5) (256,)
+conv3 (384, 256, 3, 3) (384,)
+conv4 (384, 192, 3, 3) (384,)
+conv5 (256, 192, 3, 3) (256,)
+fc6 (4096, 9216) (4096,)
+fc7 (4096, 4096) (4096,)
+fc8 (1000, 4096) (1000,)
+```
+
+ここでは4次元の配列を扱っているので、ヒートマップを使って可視化する関数を用意してみましょう。
+
+{% highlight python %}
+def vis_square(data):
+    """形が (n, height, width) か (n, height, width, 3) の配列を受け取り
+      (height, width) をおおよそ sqrt(n) by sqrt(n) のグリッドに表示"""
+
+    # まずはデータを正規化
+    data = (data - data.min()) / (data.max() - data.min())
+
+    # 可視化するフィルタの数を正方形に揃える
+    n = int(np.ceil(np.sqrt(data.shape[0])))
+    padding = (((0, n ** 2 - data.shape[0]),
+               (0, 1), (0, 1))                 # フィルタの間に隙間を挿入
+               + ((0, 0),) * (data.ndim - 3))  # 最後は隙間なし
+    data = np.pad(data, padding, mode='constant', constant_values=1)  # 隙間は白
+
+    # フィルタをタイル状に並べて画像化する
+    data = data.reshape((n, n) + data.shape[1:]).transpose((0, 2, 1, 3) + tuple(range(4, data.ndim + 1)))
+    data = data.reshape((n * data.shape[1], n * data.shape[3]) + data.shape[4:])
+
+    plt.imshow(data); plt.axis('off')
+{% endhighlight %}
+
+最初に`conv1`レイヤーのパラメータを可視化してみましょう。
+
+{% highlight python %}
+# パラメータは [weights, biases] のリストです
+filters = net.params['conv1'][0].data
+vis_square(filters.transpose(0, 2, 3, 1))
+{% endhighlight %}
+
+![conv1-filters]({{ site.baseurl }}/assets/2-conv1-filters.png)
+{: style="text-align: center"}
+
+続いて`conv1`レイヤーのアクティベーションのうち、最初の36チャネル分を見てみましょう。
+
+{% highlight python %}
+feat = net.blobs['conv1'].data[0, :36]
+vis_square(feat)
+{% endhighlight %}
+
+![conv1-activations]({{ site.baseurl }}/assets/2-conv1-activations.png)
+{: style="text-align: center"}
+
+`pool5`レイヤーの後ではアクティベーションは次のようになります。
+
+{% highlight python %}
+feat = net.blobs['pool5'].data[0]
+vis_square(feat)
+{% endhighlight %}
+
+![pool5-activations]({{ site.baseurl }}/assets/2-pool5-activations.png)
+{: style="text-align: center"}
+
+最初の全結合層`fc6`の様子はどうでしょうか。ここでは出力をヒストグラムとして表示することにします。
+
+{% highlight python %}
+feat = net.blobs['fc6'].data[0]
+plt.subplot(2, 1, 1)
+plt.plot(feat.flat)
+plt.subplot(2, 1, 2)
+_ = plt.hist(feat.flat[feat.flat > 0], bins=100)
+{% endhighlight %}
+
+![fc6-activations]({{ site.baseurl }}/assets/2-fc6-activations.png)
+{: style="text-align: center"}
+
+最後に、Softmax関数の出力`prob`ブロブからカテゴリごとの確率分布を表示してみましょう。
+
+{% highlight python %}
+feat = net.blobs['prob'].data[0]
+plt.figure(figsize=(15, 3))
+plt.plot(feat.flat)
+{% endhighlight %}
+
+![fc8-activations]({{ site.baseurl }}/assets/2-fc8-activations.png)
+{: style="text-align: center"}
+
+ここでは一部のクラスタで強く出力が出ているのがわかります。ラベルはカテゴリの近い順序で並べてあるのでこのようにネコ科のところで強く集まって出力が見えるわけです。ピークになっている場所が、上で見たように一番確率の大きいカテゴリです。
+
+## 自分の画像を分類してみる
+
+一通り画像の分類方法を見てきたので新しくWebから持ってきた画像を分類してみましょう。以下のコードで`my_image_url`を好きなJPEG画像のURLに置き換えて動かしてみましょう。
+
+{% highlight python %}
+# 画像をダウンロード
+my_image_url = "..."  # ここに画像のURLを指定
+# 例えば
+# my_image_url = "https://upload.wikimedia.org/wikipedia/commons/b/be/Orang_Utan%2C_Semenggok_Forest_Reserve%2C_Sarawak%2C_Borneo%2C_Malaysia.JPG"
+!wget -O image.jpg $my_image_url
+
+# 画像を読み込んでネットワークにコピー
+image = caffe.io.load_image('image.jpg')
+net.blobs['data'].data[...] = transformer.preprocess('data', image)
+
+# 分類処理
+net.forward()
+
+# 出力される確率分布を取得
+output_prob = net.blobs['prob'].data[0]
+
+# Softmax出力のうちトップ5のカテゴリを取得
+top_inds = output_prob.argsort()[::-1][:5]
+
+plt.imshow(image)
+
+print 'probabilities and labels:'
+zip(output_prob[top_inds], labels[top_inds])
+{% endhighlight %}
