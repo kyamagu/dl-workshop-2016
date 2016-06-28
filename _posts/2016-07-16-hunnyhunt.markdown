@@ -38,7 +38,7 @@ import tempfile
 まずはデータを準備する必要があります。これには以下の手順が必要です。
 
  1. ImageNetで学習済みのモデルをダウンロード
- 2. このデモのためのミツバチのデータセットをダウンロード
+ 2. このデモのためのマルハナバチのデータセットをダウンロード
 
 
 ```python
@@ -50,7 +50,7 @@ if not os.path.exists('data/ilsvrc12/imagenet_mean.binaryproto'):
     !data/ilsvrc12/get_ilsvrc_aux.sh
     !scripts/download_model_binary.py models/bvlc_reference_caffenet
 
-# 続いてミツバチのデータをダウンロード
+# 続いてマルハナバチのデータをダウンロード
 if not os.path.exists("data/bees"):
     !wget http://vision.is.tohoku.ac.jp/hunnyhunt/static/data/bees.tgz -O data/bees.tgz
     !tar xzf data/bees.tgz
@@ -64,7 +64,7 @@ weights = os.path.join(caffe_root, 'models/bvlc_reference_caffenet/bvlc_referenc
 assert os.path.exists(weights)
 ```
 
-今回扱うミツバチのデータはマルハナバチを中心に15種類のミツバチに集めたものです。データは`data/bees`に展開されています。少し中身を確認してみましょう。
+今回扱うマルハナバチのデータはマルハナバチを中心に15種類のマルハナバチに集めたものです。データは`data/bees`に展開されています。少し中身を確認してみましょう。
 
 
 ```python
@@ -92,7 +92,7 @@ assert os.path.exists(weights)
     39127_0.jpg  56099_0.jpg  56177_0.jpg  57009_0.jpg  57637_0.jpg
 
 
-データセットに含まれるミツバチのラベルは`labels.txt`ファイルに、学習(train)、テスト(test)、検証(validation)のためのサンプルの分割は`train.txt`、`test.txt`、`val.txt`ファイルにそれぞれテキスト形式で格納されています。これはCaffeで`ImageDataLayer`を使って画像を入力するときに使うフォーマットです。
+データセットに含まれるマルハナバチのラベルは`labels.txt`ファイルに、学習(train)、テスト(test)、検証(validation)のためのサンプルの分割は`train.txt`、`test.txt`、`val.txt`ファイルにそれぞれテキスト形式で格納されています。これはCaffeで`ImageDataLayer`を使って画像を入力するときに使うフォーマットです。
 
 
 ```python
@@ -133,7 +133,7 @@ assert os.path.exists(weights)
     data/bees/b.beaticola/46839_0.jpg 3
 
 
-ImageNetの1000カテゴリのラベルを`ilsvrc12/synset_words.txt`から、そしてミツバチの種別ラベルを `data/bees/labels.txt`からPythonに読み込みましょう。
+ImageNetの1000カテゴリのラベルを`ilsvrc12/synset_words.txt`から、そしてマルハナバチの種別ラベルを `data/bees/labels.txt`からPythonに読み込みましょう。
 
 
 ```python
@@ -143,7 +143,7 @@ imagenet_labels = list(np.loadtxt(imagenet_label_file, str, delimiter='\t'))
 assert len(imagenet_labels) == 1000
 print 'Loaded ImageNet labels:\n', '\n'.join(imagenet_labels[:10] + ['...'])
 
-# ミツバチのカテゴリをbee_labelsに読み込み
+# マルハナバチのカテゴリをbee_labelsに読み込み
 bee_label_file = caffe_root + 'data/bees/labels.txt'
 bee_labels = list(np.loadtxt(bee_label_file, str, delimiter='\n'))
 print '\nLoaded bee labels (' + str(len(bee_labels)) + '):\n', ', '.join(bee_labels)
@@ -254,10 +254,10 @@ imagenet_net_filename = caffenet(data=dummy_data, train=False)
 imagenet_net = caffe.Net(imagenet_net_filename, weights, caffe.TEST)
 ```
 
-続いて`bee_net`関数を定義します。これは内部的に`caffenet`関数を呼び、ミツバチデータに対してネットワークを作ります。新しいネットワークは同じCaffeNetアーキテクチャですが、入力と出力が異なります。
+続いて`bee_net`関数を定義します。これは内部的に`caffenet`関数を呼び、マルハナバチデータに対してネットワークを作ります。新しいネットワークは同じCaffeNetアーキテクチャですが、入力と出力が異なります。
 
- * 入力はミツバチデータを使います。これをネットワークの`ImageData`レイヤーに入力します。
- * 出力は元のImageNetの1000カテゴリではなくミツバチ15カテゴリです。
+ * 入力はマルハナバチデータを使います。これをネットワークの`ImageData`レイヤーに入力します。
+ * 出力は元のImageNetの1000カテゴリではなくマルハナバチ15カテゴリです。
  * 識別器のレイヤーは`fc8`から`fc8_bee`に名前を変更します。さもなくばネットワークを読み込んだ時に元の1000カテゴリ用の`fc8`のパラメータを読んでしまうためです。
 
 
@@ -277,7 +277,7 @@ def bee_net(train=True, learn_all=False, subset=None, num_classes=15):
                     learn_all=learn_all)
 ```
 
-ここで定義した`bee_net`関数を使って`untrained_bee_net`を初期化します。これはCaffeNetの改造版でミツバチのデータセットから入力を取得し、ImageNetからパラメータを転移してきたものです。
+ここで定義した`bee_net`関数を使って`untrained_bee_net`を初期化します。これはCaffeNetの改造版でマルハナバチのデータセットから入力を取得し、ImageNetからパラメータを転移してきたものです。
 
 `forward`メソッドを使って`untrained_bee_net`に学習データからバッチを受け取りましょう。
 
@@ -290,7 +290,7 @@ bee_data_batch = untrained_bee_net.blobs['data'].data.copy()
 bee_label_batch = np.array(untrained_bee_net.blobs['label'].data, dtype=np.int32)
 ```
 
-サイズ50のバッチからミツバチの画像を抜き出してみましょう（今回は適当に8番目の画像）。画像を表示して、それから`imagenet_net`を通し、ImageNetで学習済みネットワークが予測する1000カテゴリのうちの最もらしい5つのカテゴリを出力してみます。画面表示のためのヘルパー関数を幾つか以下に用意しました。
+サイズ50のバッチからマルハナバチの画像を抜き出してみましょう（今回は適当に8番目の画像）。画像を表示して、それから`imagenet_net`を通し、ImageNetで学習済みネットワークが予測する1000カテゴリのうちの最もらしい5つのカテゴリを出力してみます。画面表示のためのヘルパー関数を幾つか以下に用意しました。
 
 
 ```python
@@ -373,7 +373,7 @@ disp_bee_preds(untrained_bee_net, image)
     	(5)  6.67% b.consobrinus
 
 
-今回はたまたま元のImageNetの予測にちゃんと`bee`と出てきました。他の画像の場合はそんなに上手くいかないかもしれませんし、もっと言えばImageNetのカテゴリにはミツバチの細かな分類カテゴリはないので正解の`b.ardens`は絶対に出てきません。`batch_index`を8以外で0から49の間の数字に変えて予測がどうなるか試してみましょう。このバッチの50枚以上の画像を見るにはさらに`forward`をしてバッチを入れ替えます。
+今回はたまたま元のImageNetの予測にちゃんと`bee`と出てきました。他の画像の場合はそんなに上手くいかないかもしれませんし、もっと言えばImageNetのカテゴリにはマルハナバチの細かな分類カテゴリはないので正解の`b.ardens`は絶対に出てきません。`batch_index`を8以外で0から49の間の数字に変えて予測がどうなるか試してみましょう。このバッチの50枚以上の画像を見るにはさらに`forward`をしてバッチを入れ替えます。
 
 さて、今回はImageNet学習済みモデルと`bee_net`で`conv1`から`fc7`層までが全く同じです。これが本当かどうか、`fc7`の出力を比べることで以下のように確認することができます。
 
@@ -391,7 +391,7 @@ assert error < 1e-8
 del untrained_bee_net
 ```
 
-## 3. ミツバチ識別器の学習
+## 3. マルハナバチ識別器の学習
 
 それでは`solver`関数を定義し、その中でCaffeのソルバーを作りましょう。この関数では学習やスナップショット取得に関する様々なパラメータを定義します。それぞれの意味はコメント行を見てください。学習結果を改善するためにいろいろと設定を変更してみるといいでしょう。
 
@@ -679,7 +679,7 @@ del bee_solver, scratch_bee_solver, solvers
     Done.
 
 
-End-to-endの学習が終わったら早速試してみましょう。今回は全てのレイヤーがミツバチ分類に最適化されているので、両方のネットワークともに前回の最終識別層のみの学習のときよりもさらに良い性能になっているはずです。
+End-to-endの学習が終わったら早速試してみましょう。今回は全てのレイヤーがマルハナバチ分類に最適化されているので、両方のネットワークともに前回の最終識別層のみの学習のときよりもさらに良い性能になっているはずです。
 
 
 ```python

@@ -98,7 +98,7 @@ plt.imshow(image)
 {% endhighlight %}
 
 ![cat]({{ site.baseurl }}/assets/2-cat.png)
-{: style="text-align:center"}
+{: style="text-align:center;"}
 
 可愛らしいネコの画像は表示されたでしょうか。早速分類してみましょう。
 

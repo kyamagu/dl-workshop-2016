@@ -44,9 +44,9 @@ os.chdir(caffe_root)
 os.chdir('examples')
 ```
 
-## ネットワークを構成
+## ニューラルネットワークを構成
 
-それでは古典的な畳み込みネットワークであるLeNetをCaffeで作ってみましょう。
+それでは古典的な畳み込みネットワークである[LeNet](http://yann.lecun.com/exdb/lenet/)をCaffeで作ってみましょう。
 
 ネットワークを学習するには二つのファイルが必要になります。
 
@@ -436,31 +436,29 @@ train_net_path = 'mnist/custom_auto_train.prototxt'
 test_net_path = 'mnist/custom_auto_test.prototxt'
 solver_config_path = 'mnist/custom_auto_solver.prototxt'
 
-### define net
+### ネットワークの定義
 def custom_net(lmdb, batch_size):
-    # define your own net!
+    # 自分なりにニューラルネットワークを作ってみましょう
     n = caffe.NetSpec()
 
-    # keep this data layer for all networks
+    # このデータレイヤーはそのまま使いましょう
     n.data, n.label = L.Data(batch_size=batch_size, backend=P.Data.LMDB, source=lmdb,
                              transform_param=dict(scale=1./255), ntop=2)
 
-    # EDIT HERE to try different networks
-    # this single layer defines a simple linear classifier
-    # (in particular this defines a multiway logistic regression)
+    # EDIT HERE このレイヤーは単純な線形識別器を作ります
     n.score =   L.InnerProduct(n.data, num_output=10, weight_filler=dict(type='xavier'))
 
-    # EDIT HERE this is the LeNet variant we have already tried
+    # EDIT HERE これは今までに作ったLeNetの一種です
     # n.conv1 = L.Convolution(n.data, kernel_size=5, num_output=20, weight_filler=dict(type='xavier'))
     # n.pool1 = L.Pooling(n.conv1, kernel_size=2, stride=2, pool=P.Pooling.MAX)
     # n.conv2 = L.Convolution(n.pool1, kernel_size=5, num_output=50, weight_filler=dict(type='xavier'))
     # n.pool2 = L.Pooling(n.conv2, kernel_size=2, stride=2, pool=P.Pooling.MAX)
     # n.fc1 =   L.InnerProduct(n.pool2, num_output=500, weight_filler=dict(type='xavier'))
-    # EDIT HERE consider L.ELU or L.Sigmoid for the nonlinearity
+    # EDIT HERE これをL.ELUやL.Sigmoidの非線形変換に置き換えてみましょう
     # n.relu1 = L.ReLU(n.fc1, in_place=True)
     # n.score =   L.InnerProduct(n.fc1, num_output=10, weight_filler=dict(type='xavier'))
 
-    # keep this loss layer for all networks
+    # この損失関数はそのまま使いましょう
     n.loss =  L.SoftmaxWithLoss(n.score, n.label)
 
     return n.to_proto()
@@ -470,79 +468,74 @@ with open(train_net_path, 'w') as f:
 with open(test_net_path, 'w') as f:
     f.write(str(custom_net('mnist/mnist_test_lmdb', 100)))
 
-### define solver
+### ソルバーの定義
 from caffe.proto import caffe_pb2
 s = caffe_pb2.SolverParameter()
 
-# Set a seed for reproducible experiments:
-# this controls for randomization in training.
+# 乱数の初期化、これで再現性のある実験ができます
 s.random_seed = 0xCAFFE
 
-# Specify locations of the train and (maybe) test networks.
+# ソルバーにネットワークの定義の場所を指定しておきます
 s.train_net = train_net_path
 s.test_net.append(test_net_path)
-s.test_interval = 500  # Test after every 500 training iterations.
-s.test_iter.append(100) # Test on 100 batches each time we test.
+s.test_interval = 500  # 500反復毎にテスト
+s.test_iter.append(100) # テストには100バッチを使用
 
-s.max_iter = 10000     # no. of times to update the net (training iterations)
+s.max_iter = 10000     # 最大反復回数
 
-# EDIT HERE to try different solvers
-# solver types include "SGD", "Adam", and "Nesterov" among others.
+# EDIT HERE "SGD"、"Adam"、"Nesterov"といったソルバーを試してみましょう
 s.type = "SGD"
 
-# Set the initial learning rate for SGD.
-s.base_lr = 0.01  # EDIT HERE to try different learning rates
-# Set momentum to accelerate learning by
-# taking weighted average of current and previous updates.
+# SGE学習率の初期値
+s.base_lr = 0.01  # EDIT HERE 変えてみましょう
+# モーメンタムは更新量に前回との重み付き平均を取って学習を安定化させる効果があります
 s.momentum = 0.9
-# Set weight decay to regularize and prevent overfitting
+# 学習減衰率には過学習を防ぐ効果があります
 s.weight_decay = 5e-4
 
-# Set `lr_policy` to define how the learning rate changes during training.
-# This is the same policy as our default LeNet.
+# `lr_policy`でどのように学習率を変化させるか決めます
+# これはデフォルトのLeNetと同一のものです
 s.lr_policy = 'inv'
 s.gamma = 0.0001
 s.power = 0.75
-# EDIT HERE to try the fixed rate (and compare with adaptive solvers)
-# `fixed` is the simplest policy that keeps the learning rate constant.
+# EDIT HERE ポリシーを'fixed'にして適応的ソルバーと収束を比較してみましょう
+# `fixed`は最も単純に学習率をずっと固定させるものです
 # s.lr_policy = 'fixed'
 
-# Display the current training loss and accuracy every 1000 iterations.
+# 現在の損失と正答率を1000反復毎に表示
 s.display = 1000
 
-# Snapshots are files used to store networks we've trained.
-# We'll snapshot every 5K iterations -- twice during training.
+# スナップショットはネットワークの保存先です。今回は5K反復毎、つまり2回経過を保存します
 s.snapshot = 5000
 s.snapshot_prefix = 'mnist/custom_net'
 
-# Train on the GPU
-s.solver_mode = caffe_pb2.SolverParameter.GPU
+# CPUで学習します、GPUが使えたら使いましょう
+s.solver_mode = caffe_pb2.SolverParameter.CPU
 
-# Write the solver to a temporary file and return its filename.
+# ソルバーをファイルに保存してファイル名を後で使います
 with open(solver_config_path, 'w') as f:
     f.write(str(s))
 
-### load the solver and create train and test nets
+### ソルバーを読み込んで学習、テスト用のニューラルネットを作ります
 solver = None  # ignore this workaround for lmdb data (can't instantiate two solvers on the same data)
 solver = caffe.get_solver(solver_config_path)
 
-### solve
+### 学習を始めます
 niter = 250  # EDIT HERE increase to train for longer
 test_interval = niter / 10
-# losses will also be stored in the log
+# ロスと正答率は記録します
 train_loss = zeros(niter)
 test_acc = zeros(int(np.ceil(niter / test_interval)))
 
-# the main solver loop
+# 学習のメインループです
 for it in range(niter):
     solver.step(1)  # SGD by Caffe
 
-    # store the train loss
+    # ロスを保存します
     train_loss[it] = solver.net.blobs['loss'].data
 
-    # run a full test every so often
-    # (Caffe can also do this for us and write to a log, but we show here
-    #  how to do it directly in Python, where more complicated things are easier.)
+    # 指定の間隔で性能評価テスト
+    # Caffeではこれを自動でやることもできますが、今回はPythonでやる例
     if it % test_interval == 0:
         print 'Iteration', it, 'testing...'
         correct = 0

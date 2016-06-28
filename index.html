@@ -4,6 +4,11 @@ layout: default
 
 <div class="home">
 
+  <figure style="text-align:center;">
+    <img src="{{ site.baseurl }}/assets/alexnet_small.png" alt="alexnet">
+    <caption><a href="http://papers.nips.cc/paper/4824-imagenet-classification-w" target="_blank">AlexNet [A Krizhevsky, 2012]</a></caption>
+  </figure>
+
   <p>このページはDeep Learningモデルを使って画像認識をする方法を一通り学ぶ実習教材として作られました。
     ここではPython環境で<a href="https://github.com/BVLC/caffe" target="_blank">Caffeフレームワーク</a>を利用して画像認識モデルを学習、評価する方法を学ぶことができます。</p>
 
@@ -20,6 +25,16 @@ layout: default
   <h1 class="page-heading">画像認識</h1>
   <ul class="post-list">
     {% assign posts = site.categories.caffe | sort: "title" %}
+    {% for post in posts %}
+      <li>
+        <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <h1 class="page-heading">その他</h1>
+  <ul class="post-list">
+    {% assign posts = site.categories.misc | sort: "title" %}
     {% for post in posts %}
       <li>
         <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
