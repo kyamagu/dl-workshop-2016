@@ -21,7 +21,7 @@ CaffeフレームワークはWindows環境で動作させることは前提と�
 
 ### Windows
 
-Dockerは2016年6月以前はToolbox版によるインストールが主流でしたが、現在はDocker for Windowsアプリケーションに置き換わっています。Docker for WindowsはWindows 10 64-bit環境（Pro、Enterprise、Educationエデイションのみ）で利用可能です。インストーラは以下のURLから入手できます。
+Dockerは2016年6月以前はToolbox版によるインストールが主流でしたが、現在はDocker for Windowsアプリケーションに置き換わっています。Docker for WindowsはWindows 10 64-bit環境（Pro、Enterprise、Educationエディションのみ）で利用可能です。インストーラは以下のURLから入手できます。
 
 [https://www.docker.com/products/docker#/windows](https://www.docker.com/products/docker#/windows)
 
@@ -41,6 +41,8 @@ Dockerは2016年6月以前はToolbox版によるインストールが主流で�
   * メモリが少ないPCではDockerの起動に失敗することがあります。この時はDockerの設定画面から起動時の使用メモリを1024MB程度まで下げてから起動を行ってください。
 
 Dockerは基本的にコマンドプロンプト(`cmd.exe`)またはPowerShell(`PowerShell.exe`)から利用します。インストール後はコマンドプロンプトを立ち上げて`docker`コマンドを使います。
+
+この実習ではDockerの上に環境構築して進めますが、実用上はWindowsはCaffeの使用に全く向いていません。特に大規模なニューラルネットワークを学習する場合には高性能GPU付きのワークステーションにUbuntu Linuxをインストールした環境を構築することをお勧めします。（参考：[Caffeの動作環境について](5-development-environment)）
 
 ### Mac
 
@@ -65,7 +67,7 @@ Dockerは2016年6月以前はToolbox版によるインストールが主流で�
 
 Dockerは基本的にコマンドラインターミナル(`Terminal.app`)から利用します。インストール後はターミナルを立ち上げて`docker`コマンドを使います。
 
-なお、MacではDockerを使わなくてもCaffeをコンパイルして使うことができます。ただしMacには高性能GPUの入ったワークステーションがないため実用には不向きです。
+なお、MacではDockerを使わなくてもCaffeをコンパイルして使うことができます。ただしMacは高性能GPU付きのワークステーションがないため実用には不向きです。
 
 ### Ubuntu Linux
 
@@ -86,6 +88,8 @@ sudo apt-get update
 sudo apt-get install linux-image-extra-$(uname -r)
 sudo apt-get install docker
 {% endhighlight %}
+
+Dockerを使わないで直接Caffeをビルドして動かしたい場合は[Caffeの動作環境について](5-development-environment)を参考にしてください。
 
 ## 実習用Dockerイメージのダウンロードと起動
 
