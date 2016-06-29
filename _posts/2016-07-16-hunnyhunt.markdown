@@ -64,7 +64,7 @@ weights = os.path.join(caffe_root, 'models/bvlc_reference_caffenet/bvlc_referenc
 assert os.path.exists(weights)
 ```
 
-今回扱うマルハナバチのデータはマルハナバチを中心に15種類のマルハナバチに集めたものです。データは`data/bees`に展開されています。少し中身を確認してみましょう。
+今回扱うマルハナバチのデータはマルハナバチを中心に15種類のマルハナバチに集めたものです。こちらのデータは[マルハナバチ国勢調査](http://meme.biology.tohoku.ac.jp/bumblebee/)のデータから写真を切り出して作成したものです。データは`data/bees`に展開されています。少し中身を確認してみましょう。
 
 
 ```python
