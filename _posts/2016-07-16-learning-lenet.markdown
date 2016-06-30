@@ -228,7 +228,7 @@ snapshot_prefix: "mnist/lenet"
 
 ## ソルバーの読み込みと確認
 
-それではソルバーを読み込みましょう。ここではモーメンタム付きのSGEアルゴリズムを用いますが、他の学習アルゴリズム（AdagradやNesterov's accelerated gradientなど）も使うことができます。
+それではソルバーを読み込みましょう。ここではモーメンタム付きのSGDアルゴリズムを用いますが、他の学習アルゴリズム（AdagradやNesterov's accelerated gradientなど）も使うことができます。
 
 ```python
 ### ソルバーを読み込んで学習とテスト用のネットワークを作成
@@ -486,7 +486,7 @@ s.max_iter = 10000     # 最大反復回数
 # EDIT HERE "SGD"、"Adam"、"Nesterov"といったソルバーを試してみましょう
 s.type = "SGD"
 
-# SGE学習率の初期値
+# SGD学習率の初期値
 s.base_lr = 0.01  # EDIT HERE 変えてみましょう
 # モーメンタムは更新量に前回との重み付き平均を取って学習を安定化させる効果があります
 s.momentum = 0.9
