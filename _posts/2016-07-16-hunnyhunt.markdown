@@ -26,8 +26,9 @@ import sys
 sys.path.insert(0, caffe_root + 'python')
 import caffe
 
-caffe.set_device(0)
-caffe.set_mode_gpu()
+caffe.set_device(0)  # GPUデバイスを指定
+caffe.set_mode_gpu()  # GPUモードに切り替え
+# caffe.set_mode_cpu()  # CPUモードでやる場合は上をコメントアウトしこちらを使う
 
 import numpy as np
 from pylab import *
