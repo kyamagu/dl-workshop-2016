@@ -113,3 +113,27 @@ Caffeとは直接関係ありませんが、Jupyter notebookを使うには`pip`
 ```bash
 sudo pip install jupyter
 ```
+
+## ネットワーク構造のグラフ画像
+
+Caffeの配布パッケージには様々なデータやツールが含まれています。その中にネットワークのレイヤー構造をグラフとして画像に出力するスクリプトが含まれています。使うにはGraphvizと`pydotplus` Pythonパッケージをインストールしておく必要があります。
+
+*インストール手順*
+
+ターミナルを開き、以下を入力します。
+
+```bash
+apt-get update
+apt-get install graphviz
+pip install pydotplus
+```
+
+*使い方*
+
+コマンドラインから立ち上げて使います。
+
+```bash
+cd $CAFFE_ROOT
+python python/draw_net.py examples/mnist/lenet.prototxt lenet.png --rankdir=TB
+```
+最初の引数はネットワークが定義されているprototxtファイルのパス、二番目は出力されるグラフ画像のパス、`--rankdir`オプションは入力から出力がグラフ内でどのような向きになるかを指定するものです。`TB`はTop-to-Bottomの略で、上に入力、下に出力が来るようにグラフを描画します。
