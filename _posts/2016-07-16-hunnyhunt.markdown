@@ -480,7 +480,7 @@ def run_solvers(niter, solvers, disp_interval=10):
                  for _ in blobs)
     for it in range(niter):
         for name, s in solvers:
-            s.step(1)  # SGEステップを一回進める
+            s.step(1)  # SGDステップを一回進める
             loss[name][it], acc[name][it] = (s.net.blobs[b].data.copy()
                                              for b in blobs)
         if it % disp_interval == 0 or it + 1 == niter:
